@@ -4,7 +4,7 @@ import {
     HealthCheckResult,
     HealthCheckService,
     HttpHealthIndicator,
-    //   TypeOrmHealthIndicator,
+    TypeOrmHealthIndicator,
 } from '@nestjs/terminus'
 
 @Injectable()
@@ -13,7 +13,7 @@ export class HealthService {
         private readonly health: HealthCheckService,
         private readonly http: HttpHealthIndicator,
         private readonly configService: ConfigService,
-        //private postgresqlHealth: TypeOrmHealthIndicator,
+        private readonly postgresqlHealth: TypeOrmHealthIndicator,
     ) { }
 
     getUrl(): string {
@@ -25,7 +25,7 @@ export class HealthService {
     async readiness(): Promise<HealthCheckResult> {
         return this.health.check([
             () => this.http.pingCheck('Self', this.getUrl()),
-            //() => this.postgresqlHealth.pingCheck('PostgreSQL', { timeout: 30000 }),
+            () => this.postgresqlHealth.pingCheck('PostgreSQL', { timeout: 30000 }),
         ])
     }
 

@@ -5,6 +5,9 @@ import { HomeModule } from '@modules/home/home.module';
 import { HealthModule } from '@modules/health/health.module';
 import { TokenModule } from '@modules/token/token.module';
 import { UserModule } from '@modules/users/user.module';
+import { PostgreSqlModule } from '@modules/postgresql/postgresql.module';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 @Module({
   imports: [
@@ -12,10 +15,13 @@ import { UserModule } from '@modules/users/user.module';
       isGlobal: true,
       validationSchema: ConfigEnv,
     }),
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
+    }),
     HomeModule,
-    HealthModule,
+    // HealthModule,
     TokenModule,
-    UserModule
+    UserModule,
   ]
 })
 export class AppModule { }

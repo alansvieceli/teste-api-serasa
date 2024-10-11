@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Res, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UserDto } from "../dtos/user.dto";
 import { UserService } from "../services/user.service";
 import { UUIDValidationPipe } from "@common/pipes/uuid.validator.pipe";
 import { UserCreateDto } from "../dtos/user.create.dto";
 import { AuthGuard } from "@nestjs/passport";
+import { LocationInterceptor } from "@common/interceptors/location.interceptor";
 
 @Controller({
   path: 'user',
@@ -23,7 +24,8 @@ export class UserController {
     status: 201,
     description: 'criar um usuario',
   })
-  async create(@Body() userCreateDto: UserCreateDto): Promise<void> {
+  @UseInterceptors(LocationInterceptor)
+  async create(@Body() userCreateDto: UserCreateDto): Promise<UUID> {
     return this.userService.create(userCreateDto)
   }
 
@@ -45,7 +47,11 @@ export class UserController {
     type: UserDto,
     isArray: false,
   })
-  async getById(@Param('id', UUIDValidationPipe) id: UUID): Promise<UserDto> {
+  @ApiResponse({
+    status: 204,
+    description: 'Nenhum conteúdo, usuário não encontrado',
+  })
+  async getById(@Param('id', UUIDValidationPipe) id: UUID): Promise<UserDto | null> {
     return this.userService.getById(id)
   }
 
@@ -55,8 +61,12 @@ export class UserController {
     status: 204,
     description: 'Deleta um usuário pelo ID',
   })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuário não encontrado',
+  })
   async deleteById(@Param('id', UUIDValidationPipe) id: UUID): Promise<void> {
-    this.userService.deleteById(id)
+    return this.userService.deleteById(id)
   }
 
   @Put(":id")

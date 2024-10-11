@@ -1,3 +1,4 @@
+import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger"
 import { IsNotEmpty, IsString, Max, Min } from "class-validator";
 
@@ -9,6 +10,7 @@ export class UserDto {
     }
   }
 
+  @AutoMap()
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
@@ -16,6 +18,7 @@ export class UserDto {
   })
   id: UUID
 
+  @AutoMap()
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
@@ -23,6 +26,7 @@ export class UserDto {
   })
   name: string
 
+  @AutoMap()
   @Min(1)
   @Max(120)
   @ApiProperty({
