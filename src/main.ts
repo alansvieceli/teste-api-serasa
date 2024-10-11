@@ -6,6 +6,7 @@ import { EnvironmentEnum } from '@common/enums/environment.enum';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AllExceptionsFilter } from '@common/filters/exception.filter';
+import { LoggerMiddleware } from '@common/middleware/logger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -24,6 +25,8 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   })
+
+  app.use(new LoggerMiddleware().use)
 
   app.useGlobalPipes(
     new ValidationPipe({
