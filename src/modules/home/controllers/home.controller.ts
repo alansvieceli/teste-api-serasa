@@ -1,10 +1,12 @@
 import { Controller, Get } from '@nestjs/common'
 import { ApiExcludeEndpoint } from '@nestjs/swagger'
 import { HomeService } from '../services/home.service'
+import { SkipThrottle } from '@nestjs/throttler'
 
+@SkipThrottle()
 @Controller()
 export class HomeController {
-    constructor(private readonly homeService: HomeService) {}
+    constructor(private readonly homeService: HomeService) { }
 
     @Get()
     @ApiExcludeEndpoint()

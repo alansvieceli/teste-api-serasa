@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger'
 import { JwtService } from '@nestjs/jwt';
 import { UseLoginrDto } from '../dto/user.login';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller({
     path: 'auth',

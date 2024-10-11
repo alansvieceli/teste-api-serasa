@@ -8,9 +8,18 @@ import { UserModule } from '@modules/users/user.module';
 import { PostgreSqlModule } from '@modules/postgresql/postgresql.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        limit: 60,
+        ttl: seconds(60),
+        blockDuration: seconds(20),
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: ConfigEnv,
@@ -22,6 +31,12 @@ import { classes } from '@automapper/classes';
     // HealthModule,
     TokenModule,
     UserModule,
-  ]
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule { }
