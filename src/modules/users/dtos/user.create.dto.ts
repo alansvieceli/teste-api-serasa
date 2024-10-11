@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsString, Max, max, Min } from "class-validator";
+import { IsNotEmpty, IsString, Length, Matches, Max, max, Min } from "class-validator";
 
 export class UserCreateDto {
 
@@ -11,6 +11,8 @@ export class UserCreateDto {
 
   @IsString()
   @IsNotEmpty()
+  @Length(5, 100)
+  @Matches(/^[a-zA-ZÀ-ÿ\s]*$/, { message: 'Valor inválidos para o campo nome' })
   @ApiProperty({
     required: true,
   })

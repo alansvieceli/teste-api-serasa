@@ -1,6 +1,6 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsString, Max, Min } from "class-validator";
+import { IsNotEmpty, IsString, Length, Matches, Max, Min } from "class-validator";
 
 export class UserDto {
 
@@ -13,6 +13,8 @@ export class UserDto {
   @AutoMap()
   @IsString()
   @IsNotEmpty()
+  @Length(5, 100)
+  @Matches(/^[a-zA-ZÀ-ÿ\s]*$/, { message: 'Valor inválidos para o campo nome' })
   @ApiProperty({
     required: true,
   })
