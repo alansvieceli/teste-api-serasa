@@ -3,8 +3,10 @@ import { IsNotEmpty, IsString, Max, Min } from "class-validator";
 
 export class UserDto {
 
-  constructor(partial: Partial<UserDto>) {
-    Object.assign(this, partial);
+  constructor(partial?: Partial<UserDto>) {
+    if (partial) {
+      Object.assign(this, partial);
+    }
   }
 
   @IsString()
