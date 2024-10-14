@@ -1,6 +1,21 @@
 version: '3.8'
 
 services:
+  app:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    container_name: nestjs_app
+    ports:
+      - "3002:3002"
+    environment:
+      PG_HOST: postgres
+      NODE_ENV: test
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
   postgres:
     image: postgres:15
     environment:
@@ -11,3 +26,9 @@ services:
       - ./init-db:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

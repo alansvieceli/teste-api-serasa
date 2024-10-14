@@ -28,7 +28,6 @@ import { APP_GUARD } from '@nestjs/core';
       strategyInitializer: classes(),
     }),
     HomeModule,
-    // HealthModule,
     TokenModule,
     UserModule,
   ],
